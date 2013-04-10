@@ -1,0 +1,87 @@
+<!-- Javascript Web Scraper using IE Internet Object-->
+
+<!-- 2013 Thomas Börjeson -->
+
+<html>
+<head>
+	<title>scraper2.js</title>
+
+</head>
+<body>
+
+	Search: <input type="text" name="input" id= "input" size="50">
+
+	<button onclick="search()">Go</button> <br>
+
+	<!-- Set the iframe application attribute to true, which means trusted content -->
+	
+	<div id="output">  </div>
+
+<script language="jscript">
+
+var ie
+
+function search()
+{
+	var div = document.getElementById("output");
+
+	div.innerHTML = "Wait..";
+
+	var s = input.value;
+
+	for (var i= 0; i < s.length; i++)
+	{
+		if ( s.substring(i,i+1) === " ")
+		{
+			s.replace(i, "+")
+		}
+	}
+	
+	s ="www.google.com/search?q=" + s;
+
+	var ie = new ActiveXObject("InternetExplorer.Application");
+                        
+	ie.Visible = 0;  // set to 1 to display the Internet Explorer window
+	
+	ie.Navigate(s);
+
+	while (ie.Busy) { }
+
+	while (ie.readyState != 4) { }
+
+	var A = ie.document.getElementsByTagName("a");
+
+	var s = "";
+	
+	var B;
+
+	for (var i= 0; i < A.length; i++)
+	{
+		var link = A[i].href
+
+		// link filter ...
+
+		if ((link != "") &&
+		    (link.substring(0,4) == "http") &&
+		    (link.indexOf("google.com") == -1) &&
+		    (link.indexOf("youtube.com/results") == -1) &&
+		    (link.indexOf("blogger.com?") == -1) &&
+ 		    (link.indexOf("webcache") == -1))
+
+
+		if (A[i].href.indexOf("google.com") == -1) // && (A[i].Class == "l")
+		{
+			
+
+			s += A[i].href + "<br>";
+		}
+	}
+
+	div.innerHTML = s;
+
+	ie.Quit();
+}
+
+</script>
+</body>
+</html>
